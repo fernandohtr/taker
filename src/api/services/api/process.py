@@ -60,14 +60,14 @@ class Process:
     def _check_existence_process_number(self, process_number):
         if process_number is None:
             raise falcon.HTTPBadRequest(
-                'A \'process number\' is required.'
+                description='A \'process number\' is required.'
             )
 
     def _validate_process_number(self, process_number):
         regex = r'^\d{6,7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$'
         if not re.match(regex, process_number):
             raise falcon.HTTPBadRequest(
-                'The process number must be in the format: NNNNNNN-DD.AAAA.J.TR.OOOO'
+                description='The process number must be in the format: NNNNNNN-DD.AAAA.J.TR.OOOO'
             )
         
     def _validate_court(self, process_number):
@@ -75,7 +75,7 @@ class Process:
         supported_courts = [c.decode('utf-8') for c in messeger.lrange('supported_courts', 0, -1)]
         if court not in supported_courts:
             raise falcon.HTTPBadRequest(
-                f'Court not supported.'
+                description='Court not supported.'
             )
     
     def _get_court_by_numbering(self, process_number):

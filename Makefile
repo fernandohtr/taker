@@ -6,3 +6,6 @@ install-taker-dev:
 
 run-taker:
 	python src/taker/run.py
+
+start:
+	docker-compose -f docker/docker-compose.yml up -d

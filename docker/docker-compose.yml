@@ -1,6 +1,24 @@
 version: '3.9'
 
 services:
+  api:
+    build:
+      context: ./src/api
+      dockerfile: ./docker/Dockerfile
+    container_name: api
+    restart: always
+    ports:
+      - 8000:8000
+    depends_on:
+      - messeger
+  taker:
+    build:
+      context: ./src/taker
+      dockerfile: ./docker/Dockerfile
+    container_name: taker
+    restart: always
+    depends_on:
+      - messeger
   messeger:
     image: redis:7-alpine
     container_name: messeger
@@ -8,4 +26,4 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - ./data/messeger:/data
+      - ./data/messeger:/var/lib/redis/data
