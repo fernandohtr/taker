@@ -13,13 +13,10 @@ class TakerTJAL(AbstractTakerTJ):
     def get_process_data(self):
         process_data = []
         for instance in [
-            # (FirstInstance, self.URL_FIRST_INSTANCE),
-            # (SecondInstance, self.URL_SECOND_INSTANCE)
             self.get_first_instance,
             self.get_second_instance,
         ]:
             try:
-                # data = instance.get_process_data(url_instance, self.process_number)
                 data = instance()
                 process_data.append(data)
             except:
