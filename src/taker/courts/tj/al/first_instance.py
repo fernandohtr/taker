@@ -39,49 +39,49 @@ class FirstInstance(AbstractInstance):
         logging.info(f'[TJAL] {message.FIND_DATA.format(process_number)}')
         return process_data
     
-    def _get_classe(soup):
+    def _get_classe(cls, soup):
         data = soup.find('span', id='classeProcesso')
         if not data:
             logging.error(f'[TJAL] {message.CLASSE_NOT_FOUND}')
             raise AttributeError(message.CLASSE_NOT_FOUND, data)
         return data.text
         
-    def _get_area(soup):
+    def _get_area(cls, soup):
         data = soup.find('div', id='areaProcesso').span
         if not data:
             logging.error(f'[TJAL] {message.AREA_NOT_FOUND}')
             raise AttributeError(message.AREA_NOT_FOUND)
         return data.text
     
-    def _get_assunto(soup):
+    def _get_assunto(cls, soup):
         data = soup.find('span', id='assuntoProcesso')
         if not data:
             logging.error(f'[TJAL] {message.ASSUNTO_NOT_FOUND}')
             raise AttributeError(message.ASSUNTO_NOT_FOUND)
         return data.text
     
-    def _get_data_distribuicao(soup):
+    def _get_data_distribuicao(cls, soup):
         data = soup.find('div', id='dataHoraDistribuicaoProcesso')
         if not data:
             logging.error(f'[TJAL] {message.DATA_DISTRIBUICAO_NOT_FOUND}')
             raise AttributeError(message.DATA_DISTRIBUICAO_NOT_FOUND)
         return data.text
     
-    def _get_juiz(soup):
+    def _get_juiz(cls, soup):
         data = soup.find('span', id='juizProcesso')
         if not data:
             logging.error(f'[TJAL] {message.JUIZ_NOT_FOUND}')
             raise AttributeError(message.JUIZ_NOT_FOUND)
         return data.text
     
-    def _get_valor_acao(soup):
+    def _get_valor_acao(cls, soup):
         data = soup.find('div', id='valorAcaoProcesso')
         if not data:
             logging.error(f'[TJAL] {message.VALOR_ACAO_NOT_FOUND}')
             raise AttributeError(message.VALOR_ACAO_NOT_FOUND)
         return data.text.replace('R$', '').strip()
     
-    def _get_partes_processo(soup):
+    def _get_partes_processo(cls, soup):
         partes = {}
         todas_partes_data = soup.find('table', id='tableTodasPartes')
         if not todas_partes_data:
@@ -97,9 +97,10 @@ class FirstInstance(AbstractInstance):
             raw_parte = parte_data.text.strip().replace('\t', '').replace('\n \n', ',').replace('\n', '').replace('\xa0', ' ')
             list_partes = raw_parte.split(',')
 
+            raw_advogados = list_partes[1].replace('Advogado: ', ',').replace('Advogada: ', ',').split(',')
             advogados = []
-            for adv in list_partes[1:]:
-                advogados.append(adv.replace('Advogado: ', '').replace('Advogada: ', ''))
+            for adv in raw_advogados[1:]:
+                advogados.append(adv)
 
             tipo_data = parte.find('span', class_='tipoDeParticipacao')
             if not tipo_data:
@@ -111,7 +112,7 @@ class FirstInstance(AbstractInstance):
             }
         return partes
     
-    def _get_lista_movimentacao(soup):
+    def _get_lista_movimentacao(cls, soup):
         movimentacoes = []
         raw_movimentacoes_data = soup.find('tbody', id='tabelaTodasMovimentacoes')
         if not raw_movimentacoes_data:

@@ -22,12 +22,7 @@ class Process:
 
         if messeger.exists(self.process_number):
             result = [
-                json
-                    .loads(data.decode('utf-8')
-                    .replace('"', "`")
-                    .replace("\'", '"')
-                    .replace('\\xa0', ' '))
-                for data in messeger.lrange(self.process_number, 0, -1)
+                json.loads(data.decode('utf-8')) for data in messeger.lrange(self.process_number, 0, -1)
             ]
         if result:
             self.response.status = falcon.HTTP_200
@@ -39,12 +34,7 @@ class Process:
         while not result:
             sleep(1)
             result = [
-                json
-                    .loads(data.decode('utf-8')
-                    .replace('"', "`")
-                    .replace("\'", '"')
-                    .replace('\\xa0', ' '))
-                for data in messeger.lrange(self.process_number, 0, -1)
+                json.loads(data.decode('utf-8')) for data in messeger.lrange(self.process_number, 0, -1)
             ]
             check_times += 1
             if check_times > 5:
@@ -55,7 +45,7 @@ class Process:
             return
 
         self.response.status = falcon.HTTP_200
-        self.response.body = json.dumps(result.dencode('utf-8'))
+        self.response.body = json.dumps(result)
 
     def _check_existence_process_number(self, process_number):
         if process_number is None:
