@@ -1,5 +1,7 @@
 import unittest
 
+from unittest.mock import patch
+
 from bs4 import BeautifulSoup as bs
 
 from courts.tj.al.first_instance import FirstInstance
@@ -9,8 +11,6 @@ from abstract_instance import AbstractInstance
 class TestFirstInstance(unittest.TestCase):
 
     def setUp(self):
-        self.url = 'https://www2.tjal.jus.br/cpopg/show.do'
-        self.process_number = '0800001-93.2017.8.02.0001'
         self.first_instance = FirstInstance()
 
         with open('src/taker/tests/courts/tj/al/fixtures/first_instance.html', 'r') as f:
@@ -129,3 +129,50 @@ class TestFirstInstance(unittest.TestCase):
     def test_lista_movimentacao_not_found(self):
         with self.assertRaises(AttributeError):
             self.first_instance._get_lista_movimentacao(self.fail_soup)
+
+    @patch('courts.tj.al.first_instance.requests.Session.get')
+    @patch('courts.tj.al.first_instance.bs')
+    @patch('courts.tj.al.first_instance.FirstInstance.get_process_data')
+    @patch('courts.tj.al.first_instance.FirstInstance._get_classe')
+    @patch('courts.tj.al.first_instance.FirstInstance._get_area')
+    @patch('courts.tj.al.first_instance.FirstInstance._get_assunto')
+    @patch('courts.tj.al.first_instance.FirstInstance._get_data_distribuicao')
+    @patch('courts.tj.al.first_instance.FirstInstance._get_juiz')
+    @patch('courts.tj.al.first_instance.FirstInstance._get_valor_acao')
+    @patch('courts.tj.al.first_instance.FirstInstance._get_partes_processo')
+    @patch('courts.tj.al.first_instance.FirstInstance._get_lista_movimentacao')
+    def test_get_process_data(
+            self,
+            mock_get_lista_movimentacao,
+            mock_get_partes_processo,
+            mock_get_valor_acao,
+            mock_get_juiz,
+            mock_get_data_distribuicao,
+            mock_get_assunto,
+            mock_get_area,
+            mock_get_classe,
+            mock_get_process_data,
+            mock_bs,
+            mock_get):
+
+        url = 'https://www2.tjal.jus.br/cpopg/show.do'
+        process_number = '0800001-93.2017.8.02.0001'
+
+        mock_response = mock_get.return_value
+        mock_response.status_code = 200
+        mock_response.text = '<html><body><span id="classeProcesso">Test Class</span></body></html>'
+
+        mock_bs.return_value = bs(mock_response.text, 'html.parser')
+
+        mock_get_classe.return_value = 'Test Class'
+        mock_get_area.return_value
+        mock_get_assunto.return_value
+        mock_get_data_distribuicao.return_value
+        mock_get_juiz.return_value
+        mock_get_valor_acao.return_value
+        mock_get_partes_processo.return_value
+        mock_get_lista_movimentacao.return_value
+
+        FirstInstance.get_process_data(url, process_number)
+
+        mock_get_process_data.assert_called_once()
