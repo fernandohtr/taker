@@ -76,11 +76,7 @@ class SecondInstance(AbstractInstance):
         return data.text
     
     def _get_valor_acao(self, soup):
-        data = soup.find('div', id='valorAcaoProcesso').span
-        if not data:
-            logging.error(f'[TJCE] {message.VALOR_ACAO_NOT_FOUND}')
-            raise AttributeError(message.VALOR_ACAO_NOT_FOUND)
-        return data.text.replace('R$', '').strip()
+        return None
     
     def _get_partes_processo(self, soup):
         partes = {}

@@ -7,6 +7,7 @@ Tribunais suportados:
 - [TJAL 1º grau](https://www2.tjal.jus.br/cpopg/open.do)
 - [TJAL 2º grau](https://www2.tjal.jus.br/cposg5/open.do) (em progresso)
 - [TJCE 1º grau](https://esaj.tjce.jus.br/cpopg/open.do) (em progresso)
+- [TJCE 2º grau](https://esaj.tjce.jus.br/cposg5/open.do) (em progresso)
 
 ![organization](docs/imgs/organization.png)
 > Para alterar a image, importe o arquivo ".xml" na plataforma https://app.diagrams.net/
@@ -37,9 +38,12 @@ Pacotes leves e poderosos para a construção de crawlers.
 Além disso, o Taker foi desenvolvido de tal forma que se torna simples
 adicionar novos tribunais.
 
-### Oportunidades de melhoria
+### Oportunidades de melhoria e problemas
 
 - Transformar o processo assíncrono tanto na api quanto no taker.
+- Os crawlers do TJAL 2º grau e TJCE 1º e 2º grau estão com problema de acesso a
+página do tribunal, apenas a captura de dados dentro da página está em
+funcionamento.
 
 ## Prerrequisitos
 
