@@ -35,13 +35,14 @@ class Process:
         messeger.lpush('process_number', self.process_number)
         logging.info(f'Process number {self.process_number} pushed: {messeger.lrange("process_number", 0, -1)}')
         check_times = 1
+        timeout = 5
         while not result:
             sleep(1)
             result = [
                 json.loads(data.decode('utf-8')) for data in messeger.lrange(self.process_number, 0, -1)
             ]
             check_times += 1
-            if check_times > 5:
+            if check_times > timeout:
                 break
         if not result:
             self.response.status = falcon.HTTP_404
