@@ -4,6 +4,7 @@ from time import sleep
 
 from messeger import messeger
 from court_numbering import NUMBERING
+from config.log.logger import logging
 
 import falcon
 
@@ -14,6 +15,8 @@ class Process:
         self.response = response
 
     def get_data(self):
+        logging.info(f'Process number {self.process_number} received.')
+
         self._check_existence_process_number(self.process_number)
         self._validate_process_number(self.process_number)
         self._validate_court(self.process_number)
@@ -30,6 +33,7 @@ class Process:
             return
 
         messeger.lpush('process_number', self.process_number)
+        logging.info(f'Process number {self.process_number} pushed: {messeger.lrange("process_number", 0, -1)}')
         check_times = 1
         while not result:
             sleep(1)
@@ -49,6 +53,7 @@ class Process:
 
     def _check_existence_process_number(self, process_number):
         if process_number is None:
+            logging.debug('A \'process number\' is required.')
             raise falcon.HTTPBadRequest(
                 description='A \'process number\' is required.'
             )
@@ -56,6 +61,7 @@ class Process:
     def _validate_process_number(self, process_number):
         regex = r'^\d{6,7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$'
         if not re.match(regex, process_number):
+            logging.debug('The process number must be in the format: NNNNNNN-DD.AAAA.J.TR.OOOO')
             raise falcon.HTTPBadRequest(
                 description='The process number must be in the format: NNNNNNN-DD.AAAA.J.TR.OOOO'
             )
@@ -64,6 +70,7 @@ class Process:
         court = self._get_court_by_numbering(process_number)
         supported_courts = [c.decode('utf-8') for c in messeger.lrange('supported_courts', 0, -1)]
         if court not in supported_courts:
+            logging.debug('Court not supported.')
             raise falcon.HTTPBadRequest(
                 description='Court not supported.'
             )

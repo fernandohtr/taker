@@ -6,6 +6,7 @@ processuais de processos judiciais de tribunais brasileiros baseados no e-SAJ.
 Tribunais suportados:
 - [TJAL 1º grau](https://www2.tjal.jus.br/cpopg/open.do)
 - [TJAL 2º grau](https://www2.tjal.jus.br/cposg5/open.do) (em progresso)
+- [TJCE 1º grau](https://esaj.tjce.jus.br/cpopg/open.do) (em progresso)
 
 ![organization](docs/imgs/organization.png)
 > Para alterar a image, importe o arquivo ".xml" na plataforma https://app.diagrams.net/

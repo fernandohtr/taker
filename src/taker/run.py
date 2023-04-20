@@ -15,6 +15,7 @@ def main():
     
     while(True):
         logging.debug('Waiting for process number...')
+        logging.debug(f'Process number queue: {messeger.lrange("process_number", 0, -1)}')
         process_number = messeger.rpop('process_number')
         if not process_number:
             sleep(1) # turn into a lazy process
@@ -30,6 +31,7 @@ def main():
         for d in data:
             messeger.lpush(process_number, json.dumps(d).encode('utf-8'))
             logging.info(f'Process number {process_number} data pushed.')
+        messeger.lrange(process_number, 0, -1)
         sleep(1) # turn into a lazy process
 
 
@@ -51,4 +53,6 @@ def get_court_by_numbering(process_number):
         return court
     return ''
 
-main()
+
+if __name__ == '__main__':
+    main()
