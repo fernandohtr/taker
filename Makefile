@@ -1,11 +1,16 @@
-install-taker:
-	pip install -r src/taker/requirements/base.txt
+install:
+	pip install -r src/taker/requirements/base.txt -r src/api/requirements/base.txt
 
-install-taker-dev:
-	pip install -r src/taker/requirements/dev.txt
-
-run-taker:
-	python src/taker/run.py
+install-dev:
+	pip install -r src/taker/requirements/dev.txt -r src/api/requirements/dev.txt
 
 start:
 	docker-compose -f docker/docker-compose.yml up -d
+
+test-taker:
+	PYTHONPATH=src/taker pytest src/taker/tests
+
+test-api:
+	PYTHONPATH=src/api pytest src/api/tests
+
+test: test-taker test-api
