@@ -37,6 +37,10 @@ Pacotes leves e poderosos para a construção de crawlers.
 Além disso, o Taker foi desenvolvido de tal forma que se torna simples
 adicionar novos tribunais.
 
+### Oportunidades de melhoria
+
+- Transformar o processo assíncrono tanto na api quanto no taker.
+
 ## Prerrequisitos
 
 - python 3.11
