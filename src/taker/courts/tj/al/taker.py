@@ -1,6 +1,7 @@
 from abstract_taker_tj import AbstractTakerTJ
 from .first_instance import FirstInstance
 from .second_instance import SecondInstance
+from config.log.logger import logging
 
 class TakerTJAL(AbstractTakerTJ):
 
@@ -18,7 +19,8 @@ class TakerTJAL(AbstractTakerTJ):
             try:
                 data = instance()
                 process_data.append(data)
-            except:
+            except Exception as error:
+                logging.error(f'[TJCE] Error in {instance}: {error}')
                 continue
         return process_data
 

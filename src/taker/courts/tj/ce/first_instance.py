@@ -22,8 +22,11 @@ class FirstInstance(AbstractInstance):
                 'processo.numero': self.process_number
             },
             headers={
+                'Host': 'esaj.tjce.jus.br',
+                'Referer': 'https://esaj.tjce.jus.br/cpopg/open.do',
                 'User-Agent': USER_AGENT
-            }
+            },
+            verify=False
         )
         logging.debug(f'[TJCE] {message.SEARCH_DATA.format(request.url)}: Status code {request.status_code}')
         soup = bs(request.text, 'html.parser')
