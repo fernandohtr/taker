@@ -9,6 +9,8 @@ class TakerTJAL(AbstractTakerTJ):
 
     def __init__(self, process_number):
         self.process_number = process_number
+        self.first_instance = FirstInstance(self.URL_FIRST_INSTANCE, self.process_number)
+        self.second_instance = SecondInstance(self.URL_SECOND_INSTANCE, self.process_number)
 
     def get_process_data(self):
         process_data = []
@@ -24,7 +26,7 @@ class TakerTJAL(AbstractTakerTJ):
         return process_data
 
     def get_first_instance(self):
-        return FirstInstance.get_process_data(self.URL_FIRST_INSTANCE, self.process_number)
+        return self.first_instance.get_process_data()
     
     def get_second_instance(self):
-        return SecondInstance.get_process_data(self.URL_SECOND_INSTANCE, self.process_number)
+        return self.second_instance.get_process_data()

@@ -11,14 +11,17 @@ from abstract_instance import AbstractInstance
 
 class SecondInstance(AbstractInstance):
 
-    @classmethod
-    def get_process_data(cls, url, process_number):
+    def __init__(self, url, process_number):
+        self.url = url
+        self.process_number = process_number
+
+    def get_process_data(self):
         session = requests.Session()
         request = session.get(
-            url,
+            self.url,
             params={
                 'cbPesquisa': 'NUMPROC',
-                'dePesquisaNuUnificado': process_number,
+                'dePesquisaNuUnificado': self.process_number,
                 'tipoNuProcesso': 'UNIFICADO'
             },
             headers={
@@ -26,62 +29,59 @@ class SecondInstance(AbstractInstance):
             }
         )
         logging.debug(f'[TJAL] {message.SEARCH_DATA.format(request.url)}')
-        # if request.text.find('Não existem informações disponíveis para os parâmetros informados.'):
-        #     logging.f'[TJAL] {info(message.PROCESS_NOT_FOUND.format(process_number)}')
-        #     raise AttributeError(message.PROCESS_NOT_FOUND.format(process_number))
         soup = bs(request.text, 'html.parser')
         process_data = {
-            'classe': cls._get_classe(soup),
-            'area': cls._get_area(soup),
-            'assunto': cls._get_assunto(soup),
-            'data_distribuicao': cls._get_data_distribuicao(soup),
-            'juiz': cls._get_juiz(soup),
-            'valor_acao': cls._get_valor_acao(soup),
-            'partes_processo': cls._get_partes_processo(soup),
-            'lista_movimentacao': cls._get_lista_movimentacao(soup),
+            'classe': self._get_classe(soup),
+            'area': self._get_area(soup),
+            'assunto': self._get_assunto(soup),
+            'data_distribuicao': self._get_data_distribuicao(soup),
+            'juiz': self._get_juiz(soup),
+            'valor_acao': self._get_valor_acao(soup),
+            'partes_processo': self._get_partes_processo(soup),
+            'lista_movimentacao': self._get_lista_movimentacao(soup),
         }
-        logging.info(f'[TJAL] {message.FIND_DATA.format(process_number)}')
+        logging.info(f'[TJAL] {message.FIND_DATA.format(self.process_number)}')
         return process_data
     
-    def _get_classe(soup):
+    def _get_classe(self, soup):
         data = soup.find('div', id='classeProcesso')
         if not data:
             logging.error(f'[TJAL] {message.CLASSE_NOT_FOUND}')
             raise AttributeError(message.CLASSE_NOT_FOUND)
         return data.span.text
     
-    def _get_area(soup):
+    def _get_area(self, soup):
         data = soup.find('div', id='areaProcesso')
         if not data:
             logging.error(f'[TJAL] {message.AREA_NOT_FOUND}')
             raise AttributeError(message.AREA_NOT_FOUND)
         return data.span.text
     
-    def _get_assunto(soup):
+    def _get_assunto(self, soup):
         data = soup.find('div', id='assuntoProcesso')
         if not data:
             logging.error(f'[TJAL] {message.ASSUNTO_NOT_FOUND}')
             raise AttributeError(message.ASSUNTO_NOT_FOUND)
         return data.span.text
     
-    def _get_data_distribuicao(soup):
+    def _get_data_distribuicao(self, soup):
         return None
     
-    def _get_juiz(soup):
+    def _get_juiz(self, soup):
         data = soup.find('div', id='relatorProcesso').span
         if not data:
             logging.error(f'[TJAL] {message.RELATOR_NOT_FOUND}')
             raise AttributeError(message.RELATOR_NOT_FOUND)
         return data.text
     
-    def _get_valor_acao(soup):
+    def _get_valor_acao(self, soup):
         data = soup.find('div', id='valorAcaoProcesso').span
         if not data:
             logging.error(f'[TJAL] {message.VALOR_ACAO_NOT_FOUND}')
             raise AttributeError(message.VALOR_ACAO_NOT_FOUND)
         return data.text.replace('R$', '').strip()
     
-    def _get_partes_processo(soup):
+    def _get_partes_processo(self, soup):
         partes = {}
         todas_partes_data = soup.find('table', id='tablePartesPrincipais')
         if not todas_partes_data:
@@ -111,7 +111,7 @@ class SecondInstance(AbstractInstance):
             }
         return partes
     
-    def _get_lista_movimentacao(soup):
+    def _get_lista_movimentacao(self, soup):
         movimentacoes = []
 
         raw_movimentacoes_data = soup.find('tbody', id='tabelaTodasMovimentacoes')

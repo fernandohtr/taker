@@ -11,7 +11,9 @@ from abstract_instance import AbstractInstance
 class TestFirstInstance(unittest.TestCase):
 
     def setUp(self):
-        self.first_instance = FirstInstance()
+        url = 'https://www2.tjal.jus.br/cpopg/show.do'
+        process_number = '0800001-93.2017.8.02.0001'
+        self.first_instance = FirstInstance(url, process_number)
 
         with open('src/taker/tests/courts/tj/al/fixtures/first_instance.html', 'r') as f:
             fixture = f.read()
@@ -155,8 +157,7 @@ class TestFirstInstance(unittest.TestCase):
             mock_bs,
             mock_get):
 
-        url = 'https://www2.tjal.jus.br/cpopg/show.do'
-        process_number = '0800001-93.2017.8.02.0001'
+        
 
         mock_response = mock_get.return_value
         mock_response.status_code = 200
@@ -173,6 +174,6 @@ class TestFirstInstance(unittest.TestCase):
         mock_get_partes_processo.return_value
         mock_get_lista_movimentacao.return_value
 
-        FirstInstance.get_process_data(url, process_number)
+        self.first_instance.get_process_data()
 
         mock_get_process_data.assert_called_once()

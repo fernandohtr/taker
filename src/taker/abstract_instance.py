@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 class AbstractInstance(metaclass=ABCMeta):
     
     @abstractmethod
-    def get_process_data(self, url, process_number):
+    def get_process_data(self):
         pass
 
     @abstractmethod
