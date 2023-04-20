@@ -11,9 +11,8 @@ from abstract_instance import AbstractInstance
 class TestFirstInstance(unittest.TestCase):
 
     def setUp(self):
-        url = 'https://www2.tjal.jus.br/cpopg/show.do'
-        process_number = '0800001-93.2017.8.02.0001'
-        self.first_instance = FirstInstance(url, process_number)
+        process_number = '0710802-55.2018.8.02.0001'
+        self.first_instance = FirstInstance(process_number)
 
         with open('src/taker/tests/courts/tj/al/fixtures/first_instance.html', 'r') as f:
             fixture = f.read()

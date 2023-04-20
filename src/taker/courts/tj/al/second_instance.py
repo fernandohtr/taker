@@ -11,14 +11,15 @@ from abstract_instance import AbstractInstance
 
 class SecondInstance(AbstractInstance):
 
-    def __init__(self, url, process_number):
-        self.url = url
+    URL = 'https://www2.tjal.jus.br/cposg5/search.do'
+
+    def __init__(self, process_number):
         self.process_number = process_number
 
     def get_process_data(self):
         session = requests.Session()
         request = session.get(
-            self.url,
+            self.URL,
             params={
                 'cbPesquisa': 'NUMPROC',
                 'dePesquisaNuUnificado': self.process_number,
