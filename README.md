@@ -58,6 +58,21 @@ Na raiz do projeto, execute:
 make start
 ```
 
+Para ver os logs use:
+```
+make logs
+```
+
+Com a aplicação rodando, é possível limpar os dados da mensageria (redis):
+```
+make clean-cache
+```
+
+Para parar o projeto, basta executar:
+```
+mkae stop
+```
+
 ## Modo de usar
 
 O principal endpoint é o http://localhost:8000/api.
